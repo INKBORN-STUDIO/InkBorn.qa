@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inkborn Studio — Premium Digital Illustration & Concept Art</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --ink: #0f0d0a;
+    --parchment: #faf8f3;
+    --cream: #f2ede3;
+    --gold: #c9a84c;
+    --gold-light: #e8d49a;
+    --rust: #b85c38;
+    --sage: #6b8f71;
+    --muted: #6b6560;
+    --border: rgba(15,13,10,0.12);
+  }
+ 
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--parchment);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+ 
+  /* ── CSS TEXTURE GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+ 
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(250,248,243,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+    z-index: 100;
+  }
+ 
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+  }
+ 
+  .logo span {
+    color: var(--gold);
+    font-style: italic;
+    font-weight: 400;
+  }
+ 
+  nav a.cta-pill {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: var(--ink);
+    padding: 0.6rem 1.35rem;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+ 
+  nav a.cta-pill:hover { background: var(--rust); }
+ 
+  /* ── HERO LAYOUT ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    position: relative;
+    overflow: hidden;
+  }
+ 
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 9rem 5rem 5rem 4rem;
+    position: relative;
+    z-index: 2;
+  }
+ 
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+ 
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--gold);
+  }
+ 
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4.8vw, 4.2rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.75rem;
+    color: var(--ink);
+  }
+ 
+  h1 em {
+    color: var(--rust);
+    font-style: italic;
+  }
+ 
+  .hero-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted);
+    max-width: 460px;
+    margin-bottom: 2.75rem;
+    font-weight: 300;
+  }
+ 
+  /* ── WAITLIST FORM CONTAINER ── */
+  .waitlist-box {
+    background: var(--cream);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    max-width: 460px;
+    box-shadow: 0 8px 24px rgba(15,13,10,0.02);
+  }
+ 
+  .waitlist-box p {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.9rem;
+  }
+ 
+  .input-row {
+    display: flex;
+    gap: 0.6rem;
+  }
+ 
+  .input-row input {
+    flex: 1;
+    border: 0.5px solid var(--border);
+    border-radius: 100px;
+    padding: 0.8rem 1.4rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    background: var(--parchment);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+ 
+  .input-row input:focus { 
+    border-color: var(--gold); 
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .input-row input::placeholder { color: var(--muted); opacity: 0.5; }
+ 
+  .input-row button {
+    background: var(--ink);
+    color: var(--parchment);
+    border: none;
+    border-radius: 100px;
+    padding: 0.8rem 1.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, transform 0.1s;
+  }
+ 
+  .input-row button:hover { background: var(--rust); }
+  .input-row button:active { transform: scale(0.98); }
+ 
+  .success-msg {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--sage);
+    font-size: 0.9rem;
+    margin-top: 0.85rem;
+    font-weight: 500;
+  }
+ 
+  .success-msg.visible { display: flex; }
+ 
+  .count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+ 
+  .count-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+ 
+  /* ── HERO HERO ART DISPLAY ── */
+  .hero-right {
+    position: relative;
+    background: #0b0a09;
+    border-left: 0.5px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+  }
+ 
+  .hero-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.9;
+    display: block;
+  }
+ 
+  .hero-right-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(15,13,10,0.4) 0%, transparent 40%),
+                linear-gradient(to top, rgba(15,13,10,0.2) 0%, transparent 20%);
+    pointer-events: none;
+  }
+ 
+  .hero-right-badge {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background: rgba(15,13,10,0.75);
+    border: 0.5px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+ 
+  .hero-right-badge span:first-child {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 700;
+  }
+ 
+  .hero-right-badge span:last-child {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    color: #faf8f3;
+    font-style: italic;
+  }
+ 
+  /* ── RUNNING TEXT MARQUEE ── */
+  .marquee-wrap {
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    overflow: hidden;
+    padding: 1rem 0;
+    background: var(--ink);
+  }
+ 
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: scroll 32s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+ 
+  .marquee-track span {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    font-weight: 500;
+  }
+ 
+  .marquee-track .sep { color: var(--gold); opacity: 0.4; }
+ 
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+ 
+  /* ── CORE CAPABILITIES GRID ── */
+  .services {
+    padding: 8rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+ 
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--border);
+    box-shadow: 0 12px 32px rgba(15,13,10,0.01);
+  }
+ 
+  .service-card {
+    background: var(--parchment);
+    padding: 3rem 2.5rem;
+    transition: background 0.3s ease;
+    cursor: default;
+  }
+ 
+  .service-card:hover { background: var(--cream); }
+ 
+  .svc-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.7rem;
+    color: rgba(201,168,76,0.22);
+    line-height: 1;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+  }
+ 
+  .svc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.85rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+ 
+  .svc-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+  }
+ 
+  /* ── FEATURED CASE STUDY ── */
+  .portfolio-showcase {
+    background: var(--ink);
+    padding: 8rem 4rem;
+  }
+ 
+  .portfolio-inner {
+    max-width: 1150px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 5rem;
+    align-items: center;
+  }
+ 
+  .portfolio-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.15;
+    color: var(--parchment);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+ 
+  .portfolio-title em { color: var(--gold); font-style: italic; }
+ 
+  .portfolio-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(250,248,243,0.6);
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+ 
+  .portfolio-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+ 
+  .tag {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    border: 0.5px solid rgba(232,212,154,0.25);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    background: rgba(250,248,243,0.02);
+  }
+ 
+  .portfolio-image-wrap {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 0.5px solid rgba(251,248,243,0.1);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.3);
+  }
+ 
+  .portfolio-image-wrap img {
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+ 
+  .portfolio-image-wrap:hover img { transform: scale(1.04); }
+ 
+  .portfolio-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(11,10,9,0.95) 0%, rgba(11,10,9,0.4) 70%, transparent 100%);
+    padding: 3rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+ 
+  .caption-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--parchment);
+    font-style: italic;
+  }
+ 
+  .caption-type {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+ 
+  /* ── PRODUCTION WORKFLOW ── */
+  .process {
+    padding: 8rem 4rem;
+    background: var(--ink);
+    color: var(--parchment);
+    border-top: 0.5px solid rgba(250,248,243,0.08);
+  }
+ 
+  .process .section-label { color: var(--gold-light); }
+  .process .section-label::before { background: var(--gold-light); }
+ 
+  .process h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.15;
+    max-width: 650px;
+    margin-bottom: 4.5rem;
+    letter-spacing: -0.01em;
+  }
+ 
+  .process h2 em { color: var(--gold); font-style: italic; }
+ 
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 1150px;
+    margin: 0 auto;
+  }
+ 
+  .step {
+    padding: 2.25rem 2rem;
+    border: 0.5px solid rgba(250,248,243,0.1);
+    border-radius: 12px;
+    background: rgba(250,248,243,0.01);
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  
+  .step:hover {
+    border-color: rgba(201,168,76,0.35);
+    background: rgba(250,248,243,0.03);
+  }
+ 
+  .step-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+ 
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: var(--parchment);
+  }
+ 
+  .step-desc {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: rgba(250,248,243,0.55);
+    font-weight: 300;
+  }
+ 
+  /* ── CLOSING CONVERSION CTA ── */
+  .final-cta {
+    padding: 10rem 4rem;
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto;
+  }
+ 
+  .final-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+ 
+  .final-cta h2 em { color: var(--rust); font-style: italic; }
+ 
+  .final-cta p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+ 
+  .final-waitlist {
+    display: flex;
+    gap: 0.6rem;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+ 
+  .final-waitlist input {
+    flex: 1;
+    border: 0.5px solid var(--border);
+    border-radius: 100px;
+    padding: 0.9rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    background: var(--cream);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+ 
+  .final-waitlist input:focus { border-color: var(--gold); }
+  .final-waitlist input::placeholder { color: var(--muted); opacity: 0.5; }
+ 
+  .final-waitlist button {
+    background: var(--ink);
+    color: var(--parchment);
+    border: none;
+    border-radius: 100px;
+    padding: 0.9rem 2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+ 
+  .final-waitlist button:hover { background: var(--rust); }
+  .final-waitlist button:active { transform: scale(0.98); }
+ 
+  .success-final {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--sage);
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    font-weight: 500;
+  }
+ 
+  .success-final.visible { display: flex; }
+ 
+  /* ── FOOTER ── */
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 3rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+ 
+  footer p {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+ 
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 700;
+  }
+ 
+  .footer-logo span { color: var(--gold); font-style: italic; font-weight: 400; }
+ 
+  /* ── RESPONSIVE ADAPTATION GRAPH ── */
+  @media (max-width: 1100px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+  }
+ 
+  @media (max-width: 768px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 7.5rem 1.5rem 4rem 1.5rem; }
+    .hero-right { min-height: 380px; border-left: none; border-top: 0.5px solid var(--border); }
+    .input-row { flex-direction: column; }
+    .input-row button { width: 100%; }
+    .services { padding: 5rem 1.5rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .portfolio-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .portfolio-showcase { padding: 5rem 1.5rem; }
+    .portfolio-image-wrap img { height: 320px; }
+    .process { padding: 5rem 1.5rem; }
+    .steps { grid-template-columns: 1fr; gap: 1rem; }
+    .final-cta { padding: 6rem 1.5rem; }
+    .final-waitlist { flex-direction: column; }
+    .final-waitlist button { width: 100%; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 3rem 1.5rem; }
+  }
+ 
+  /* ── SMOOTH ENTRANCE ANIMATIONS ── */
+  @keyframes cubicFadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+ 
+  .hero-left > * {
+    animation: cubicFadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+ 
+  .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-left > *:nth-child(2) { animation-delay: 0.22s; }
+  .hero-left > *:nth-child(3) { animation-delay: 0.35s; }
+  .hero-left > *:nth-child(4) { animation-delay: 0.48s; }
+</style>
+</head>
+<body>
+ 
+<nav>
+  <a href="#" class="logo">Ink<span>born</span></a>
+  <a href="#waitlist-section" class="cta-pill">Join Waitlist</a>
+</nav>
+ 
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Bespoke Digital Art Studio</div>
+    <h1>Illustrations that tell stories before words <em>do.</em></h1>
+    <p class="hero-desc">
+      Inkborn crafts intentional digital artwork, precise character concepts, and cinematic keyframes for imaginative worldbuilders and creative agencies.
+    </p>
+ 
+    <div class="waitlist-box" id="waitlist-section">
+      <p>Founding Client Access — Limited Capacity</p>
+      <div class="input-row">
+        <input type="email" id="email-hero" placeholder="Enter your email..." aria-label="Email address for queue entrance" />
+        <button onclick="processWaitlistForm('hero')">Reserve Slot</button>
+      </div>
+      <div class="success-msg" id="success-hero">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="#6b8f71"/><path d="M5 8l2 2 4-4" stroke="#6b8f71" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Your slot is safely secured. We'll speak very soon.
+      </div>
+      <div class="count-badge"><span class="dot"></span> 247 creators queued for entry</div>
+    </div>
+  </div>
+ 
+  <div class="hero-right">
+    <img src="enviromental artp" alt="Environmental concept art featuring a lone explorer looking at giant glowing crystals embedded in a massive dragon skeleton next to waterfalls" />
+    <div class="hero-right-overlay"></div>
+    <div class="hero-right-badge">
+      <span>Studio Standard</span>
+      <span>Cinematic World Design</span>
+    </div>
+  </div>
+</section>
+ 
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Concept Art</span><span class="sep">✦</span>
+    <span>Character Design</span><span class="sep">✦</span>
+    <span>Visual Development</span><span class="sep">✦</span>
+    <span>World Building</span><span class="sep">✦</span>
+    <span>Book Illustration</span><span class="sep">✦</span>
+    <span>Keyframe Art</span><span class="sep">✦</span>
+    <span>Editorial Art</span><span class="sep">✦</span>
+    <span>Concept Art</span><span class="sep">✦</span>
+    <span>Character Design</span><span class="sep">✦</span>
+    <span>Visual Development</span><span class="sep">✦</span>
+    <span>World Building</span><span class="sep">✦</span>
+    <span>Book Illustration</span><span class="sep">✦</span>
+    <span>Keyframe Art</span><span class="sep">✦</span>
+    <span>Editorial Art</span><span class="sep">✦</span>
+  </div>
+</div>
+ 
+<section class="services">
+  <div class="section-label">Core Capabilities</div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="svc-num">01</div>
+      <div class="svc-title">Character &amp; Creature Design</div>
+      <p class="svc-desc">Anatomically grounded, rich designs detailing narrative history through precise costume and posture development.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">02</div>
+      <div class="svc-title">Environment &amp; World Design</div>
+      <p class="svc-desc">Cinematic landscape designs and deep world layout concepts emphasizing complex scale and light staging.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">03</div>
+      <div class="svc-title">Keyframe &amp; Production Art</div>
+      <p class="svc-desc">High-impact narrative frames designed explicitly to lock down composition and core mood beats for pre-production.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">04</div>
+      <div class="svc-title">Editorial &amp; Publishing</div>
+      <p class="svc-desc">Premium wrap-around layouts for books, dynamic magazine art, and surface layouts that command a second look.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">05</div>
+      <div class="svc-title">Game UI &amp; Asset Packs</div>
+      <p class="svc-desc">Beautifully styled fantasy elements, interactive icons, and texture panels meticulously stacked for seamless layer customization.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-num">06</div>
+      <div class="svc-title">Custom Commissions</div>
+      <p class="svc-desc">Tailored, hand-painted illustrative projects engineered around challenging, high-detail creative specs.</p>
+    </div>
+  </div>
+</section>
+ 
+<section class="portfolio-showcase">
+  <div class="portfolio-inner">
+    <div class="portfolio-meta">
+      <div class="section-label" style="margin-bottom:1.5rem;">The Style</div>
+      <h2 class="portfolio-title">Worlds built with <em>painterly precision.</em></h2>
+      <p class="portfolio-desc">We emphasize rich hand-painted aesthetics, tangible brushwork structures, and rigorous lighting controls to deliver high-end fantasy imagery devoid of synthetic looking, over-smoothed digital layers.</p>
+      <div class="portfolio-tags">
+        <span class="tag">Technical Painting Style</span>
+        <span class="tag">Anatomical Realism</span>
+        <span class="tag">Immersive Lighting</span>
+      </div>
+    </div>
+    <div class="portfolio-image-wrap">
+      <img src="enviromental artp.jpg" alt="Featured showcase landscape — Dragon's Rest environment concept design" />
+      <div class="portfolio-caption">
+        <span class="caption-label">Dragon's Rest</span>
+        <span class="caption-type">Digital Concept Layout · Hand-Painted Focus</span>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<section class="process">
+  <div style="max-width:1150px; margin:0 auto;">
+    <div class="section-label">The Studio Pipeline</div>
+    <h2>From primitive sketch to<br><em>polished assets,</em> without friction.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <div class="step-title">Briefing &amp; Strategy</div>
+        <p class="step-desc">We outline your project’s narrative structure, reference assets, and foundational mood parameters.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <div class="step-title">Structural Sketches</div>
+        <p class="step-desc">Delivery of distinct compositional arrays and thumbnails to secure correct perspective and silhouette paths.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <div class="step-title">Color Rendering</div>
+        <p class="step-desc">We block in values and atmospheric lighting structures to confirm values match mood beats perfectly.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 04</div>
+        <div class="step-title">Final Asset Delivery</div>
+        <p class="step-desc">The high-fidelity hand-painted asset is finalized, cleaned up, and delivered in high-res format with standard usage rights.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<section class="final-cta">
+  <div class="section-label" style="justify-content:center;">Early Queue Access</div>
+  <h2>The waitlist is <em>open.</em></h2>
+  <p>We work exclusively with a select group of creators and studios per production block to maintain meticulous asset quality. Secure your placement below to join our next open onboarding slot.</p>
+  <div class="final-waitlist">
+    <input type="email" id="email-final" placeholder="Enter your email address..." aria-label="Email address entry for final queue prompt" />
+    <button onclick="processWaitlistForm('final')">Secure Entrance</button>
+  </div>
+  <div class="success-final" id="success-final">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="#6b8f71"/><path d="M5 8l2 2 4-4" stroke="#6b8f71" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    You are in line. Expect our foundational framework pack in your inbox shortly.
+  </div>
+</section>
+ 
+<footer>
+  <div class="footer-logo">Ink<span>born</span></div>
+  <p>© 2026 Inkborn Studio. Crafted with meticulous intention.</p>
+  <p><a href="mailto:productspark9@gmail.com" style="color:inherit; text-decoration:none;">productspark9@gmail.com</a></p>
+</footer>
+ 
+<script>
+  // Simple persistent state controller utilizing localStorage for client records
+  const registeredWaitlist = JSON.parse(localStorage.getItem('inkborn_studio_waitlist') || '[]');
+ 
+  function processWaitlistForm(identifier) {
+    const selectorInput = document.getElementById('email-' + identifier);
+    const checkedEmail = selectorInput.value.trim();
+    
+    // Strict pattern alignment test
+    const syntaxEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!checkedEmail || !syntaxEmailPattern.test(checkedEmail)) {
+      selectorInput.style.borderColor = 'var(--rust)';
+      selectorInput.style.boxShadow = '0 0 0 3px rgba(184,92,56,0.15)';
+      setTimeout(() => {
+        selectorInput.style.borderColor = '';
+        selectorInput.style.boxShadow = '';
+      }, 1400);
+      return;
+    }
+    
+    // Push tracking entries to local array store
+    if (!registeredWaitlist.includes(checkedEmail)) {
+      registeredWaitlist.push(checkedEmail);
+      localStorage.setItem('inkborn_studio_waitlist', JSON.stringify(registeredWaitlist));
+    }
+    
+    // Wipe inputs and reveal confirmation animations
+    selectorInput.value = '';
+    const outputSuccessBox = document.getElementById('success-' + identifier);
+    outputSuccessBox.classList.add('visible');
+    
+    setTimeout(() => {
+      outputSuccessBox.classList.remove('visible');
+    }, 6500);
+  }
+ 
+  // Intercept standard input layout keystrokes for clean form mechanics
+  document.querySelectorAll('input[type=email]').forEach(formField => {
+    formField.addEventListener('keydown', eventKey => {
+      if (eventKey.key === 'Enter') {
+        eventKey.preventDefault();
+        const extractedSourceTag = formField.id.replace('email-', '');
+        processWaitlistForm(extractedSourceTag);
+      }
+    });
+  });
+</script>
+ 
+</body>
+</html>
